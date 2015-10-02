@@ -1,0 +1,10 @@
+{
+  "estilo1": {
+    "background":"@color/main_color",
+    "text_color": "@color/my_color"
+  },
+  "estilo2": {
+    "background":"@color/nada",
+    "text_color": "@color/my_color"
+  }
+}

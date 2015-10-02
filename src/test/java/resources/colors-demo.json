@@ -1,0 +1,5 @@
+{
+  "main_color":"#ff0000",
+  "nada":"@color/main_color",
+  "my_color":"#ff00ff"
+}
