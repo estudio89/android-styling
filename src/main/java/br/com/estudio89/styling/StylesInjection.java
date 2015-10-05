@@ -25,7 +25,12 @@ public class StylesInjection {
         graph.put(StylesRenderer.class, renderer);
     }
 
-    public static <E> E get(Class<?> k) {
-        return (E) graph.get(k);
+    public static <E> E get(Class<?> klass) {
+        E item = (E) graph.get(klass);
+
+        if (item == null && klass == StylesRenderer.class) {
+            return (E) new NullStylesRenderer(null);
+        }
+        return item;
     }
 }
