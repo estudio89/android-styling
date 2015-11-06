@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.*;
 import android.util.TypedValue;
+import br.com.estudio89.styling.StylesManager;
 import org.json.JSONObject;
 
 /**
@@ -34,7 +35,7 @@ public class DrawableRenderer extends AbstractViewRenderer {
         String layerId = params.optString("layerId");
         if (!"".equals(layerId)) {
             GradientDrawable shape = null;
-            int resId = context.getResources().getIdentifier(layerId, "id", context.getPackageName());
+            int resId = context.getResources().getIdentifier(layerId, "id", StylesManager.getInstance().getApplicationPackage());
             try {
                 LayerDrawable layers = (LayerDrawable) drawable;
                 try {
@@ -68,9 +69,9 @@ public class DrawableRenderer extends AbstractViewRenderer {
             String strokeWidth = params.optString("strokeWidth");
             if (!"".equals(strokeWidth)) {
                 float width = Float.parseFloat(strokeWidth.replace("dp",""));
-                px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, r.getDisplayMetrics());
+                px = (int) Math.ceil(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, r.getDisplayMetrics()));
             } else {
-                px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, r.getDisplayMetrics());
+                px = (int) Math.ceil(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, r.getDisplayMetrics()));
             }
             shape.setStroke(px, Color.parseColor(stroke));
         }

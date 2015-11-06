@@ -72,7 +72,7 @@ public class StylesRenderer {
                 throw new RuntimeException(e);
             }
 
-            int resId = context.getResources().getIdentifier(viewId, "id", context.getPackageName());
+            int resId = context.getResources().getIdentifier(viewId, "id", stylesManager.getApplicationPackage());
             View view = null;
 
             if (parentView != null) {

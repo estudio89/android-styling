@@ -9,15 +9,15 @@ import java.util.HashMap;
 public class StylesInjection {
     private static HashMap<Class, Object> graph = new HashMap<Class, Object>();
 
-    public static void init(InputStream stylesFile, InputStream colorsFile, InputStream viewStylesFile) {
-        executeInjection(stylesFile, colorsFile, viewStylesFile);
+    public static void init(InputStream stylesFile, InputStream colorsFile, InputStream viewStylesFile, String applicationPackage) {
+        executeInjection(stylesFile, colorsFile, viewStylesFile, applicationPackage);
     }
 
-    private static void executeInjection(InputStream stylesFile, InputStream colorsFile, InputStream viewStylesFile) {
+    private static void executeInjection(InputStream stylesFile, InputStream colorsFile, InputStream viewStylesFile, String applicationPackage) {
         StylesProcessor processor = new StylesProcessor(stylesFile, colorsFile, viewStylesFile);
         processor.fullProcess();
 
-        StylesManager manager = new StylesManager(processor);
+        StylesManager manager = new StylesManager(processor, applicationPackage);
         StylesRenderer renderer = new StylesRenderer(manager);
 
         graph.put(StylesProcessor.class, processor);

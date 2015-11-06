@@ -8,13 +8,16 @@ import org.json.JSONObject;
  */
 public class StylesManager {
     private StylesProcessor processor;
+    private String applicationPackage;
 
     public static StylesManager getInstance() {
         return StylesInjection.get(StylesManager.class);
     }
 
-    public StylesManager(StylesProcessor processor) {
+    public StylesManager(StylesProcessor processor, String applicationPackage) {
+
         this.processor = processor;
+        this.applicationPackage = applicationPackage;
     }
 
     public JSONObject getStyles(String viewId) throws NoStyleDefinitionException {
@@ -43,6 +46,10 @@ public class StylesManager {
             throw new UnknownColorException("No color definition found for name " + colorName);
         }
 
+    }
+
+    public String getApplicationPackage() {
+        return applicationPackage;
     }
 
     public static class NoStyleDefinitionException extends Exception {
