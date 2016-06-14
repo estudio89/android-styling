@@ -1,2 +1,9 @@
-.idea/*
-target/*
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/styling/build
+/captures

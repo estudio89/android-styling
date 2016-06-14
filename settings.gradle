@@ -1,0 +1,2 @@
+include ':styling'
+rootProject.name = 'styling'

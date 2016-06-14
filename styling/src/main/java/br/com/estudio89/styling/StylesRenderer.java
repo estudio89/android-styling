@@ -3,13 +3,22 @@ package br.com.estudio89.styling;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-import br.com.estudio89.styling.renderers.*;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import br.com.estudio89.styling.renderers.AbstractViewRenderer;
+import br.com.estudio89.styling.renderers.ActionBarRenderer;
+import br.com.estudio89.styling.renderers.ButtonRenderer;
+import br.com.estudio89.styling.renderers.CheckBoxRenderer;
+import br.com.estudio89.styling.renderers.GenericViewRenderer;
+import br.com.estudio89.styling.renderers.StatusBarRenderer;
+import br.com.estudio89.styling.renderers.TextViewRenderer;
+import br.com.estudio89.styling.renderers.ViewGroupRenderer;
 
 /**
  * Created by luccascorrea on 10/1/15.
@@ -47,6 +56,7 @@ public class StylesRenderer {
     }
 
     public void renderLayout(String viewXml, View parentView, Activity activity) {
+        long startTime = System.currentTimeMillis();
         Context context = null;
         if (parentView != null) {
             context = parentView.getContext();
@@ -58,7 +68,7 @@ public class StylesRenderer {
         try {
             parentViewStyles = this.stylesManager.getStyles(viewXml);
         } catch (StylesManager.NoStyleDefinitionException e) {
-            throw new RuntimeException(e);
+            throw new StylesManager.NoStyleDefinitionForLayoutException(e);
         }
 
         Iterator<String> viewIds = parentViewStyles.keys();
@@ -95,9 +105,12 @@ public class StylesRenderer {
             renderer.render(view, viewStyles);
 
         }
+        long endTime = System.currentTimeMillis();
+//        Log.d("Styling", "Total time to render layout " + viewXml + " was " + (endTime - startTime) + " ms.");
     }
 
     public void renderView(String styleName, Object view) {
+        long startTime = System.currentTimeMillis();
         JSONObject style = this.stylesManager.getStyle(styleName);
         AbstractViewRenderer renderer = null;
         try {
@@ -106,6 +119,8 @@ public class StylesRenderer {
             throw new RuntimeException("Could not find a suitable renderer for class " + view.getClass().getSimpleName());
         }
         renderer.render(view, style);
+        long endTime = System.currentTimeMillis();
+//        Log.d("Styling", "Total time to render view " + styleName + " was " + (endTime - startTime) + " ms.");
     }
 
     protected AbstractViewRenderer getRenderer(Object view) throws RendererNotFoundException {

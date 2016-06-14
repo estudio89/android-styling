@@ -34,7 +34,7 @@ public class StylesManager {
         try {
             return styles.getJSONObject(styleName);
         } catch (JSONException e) {
-            throw new UnknownStyleException("No styles are defined whith name " + styleName);
+            throw new UnknownStyleException("No styles are defined with name " + styleName);
         }
     }
 
@@ -52,13 +52,32 @@ public class StylesManager {
         return applicationPackage;
     }
 
-    public static class NoStyleDefinitionException extends Exception {
+    public static class NoStyleDefinitionException extends RuntimeException {
+
+        public NoStyleDefinitionException(Throwable throwable) {
+            super(throwable);
+        }
 
         public NoStyleDefinitionException(String s) {
             super(s);
         }
 
         public NoStyleDefinitionException(String s, Throwable throwable) {
+            super(s, throwable);
+        }
+    }
+
+    public static class NoStyleDefinitionForLayoutException extends NoStyleDefinitionException {
+
+        public NoStyleDefinitionForLayoutException(Throwable throwable) {
+            super(throwable);
+        }
+
+        public NoStyleDefinitionForLayoutException(String s) {
+            super(s);
+        }
+
+        public NoStyleDefinitionForLayoutException(String s, Throwable throwable) {
             super(s, throwable);
         }
     }
