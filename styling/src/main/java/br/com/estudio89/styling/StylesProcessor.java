@@ -1,9 +1,16 @@
 package br.com.estudio89.styling;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
 /**
@@ -27,26 +34,30 @@ public class StylesProcessor {
         this.viewsStyles = inputStreamToJSON(viewsStyles);
     }
 
-    protected void processColorDefinitions () {
-        processDefinitions(this.colorsDefinition);
+    protected boolean processColorDefinitions () {
+        return processDefinitions(this.colorsDefinition);
     }
 
-    protected void processStylesDefinition() {
-        processDefinitions(this.stylesDefinition);
+    protected boolean processStylesDefinition() {
+        return processDefinitions(this.stylesDefinition);
     }
 
-    protected void processViewStylesDefinition () {
-        processDefinitions(this.viewsStyles);
+    protected boolean processViewStylesDefinition () {
+        return processDefinitions(this.viewsStyles);
     }
 
-    public void fullProcess() {
-        processColorDefinitions();
-        processStylesDefinition();
-        processViewStylesDefinition();
+    public boolean fullProcess() {
+        boolean hasUndefinedColors = processColorDefinitions();
+        boolean hasUndefinedStyles = processStylesDefinition();
+        boolean hasUndefinedViewStyles = processViewStylesDefinition();
+
+        return hasUndefinedColors || hasUndefinedStyles ||  hasUndefinedViewStyles;
     }
 
 
-    protected void processDefinitions (JSONObject definitions) {
+    protected boolean processDefinitions (JSONObject definitions) {
+        boolean hasUndefinedVariables = false;
+
         Iterator<String> itemNames = definitions.keys();
         while(itemNames.hasNext()) {
             String name = itemNames.next();
@@ -54,8 +65,11 @@ public class StylesProcessor {
             JSONObject nestedObj;
             try {
                 nestedObj = definitions.getJSONObject(name);
-                processDefinitions(nestedObj);
+                boolean hasUndefinedNestedVariables = processDefinitions(nestedObj);
                 definitions.put(name, nestedObj);
+                if (hasUndefinedNestedVariables) {
+                    hasUndefinedVariables = true;
+                }
                 continue;
 
             } catch (JSONException e) {
@@ -79,7 +93,9 @@ public class StylesProcessor {
                     try {
                         value = variableSource.getString(variableName);
                     } catch (JSONException e1) {
-                        throw new RuntimeException(e1);
+                        Log.e("Styling", "Error processing variable with name \"" + variableName + "\". There may be a color missing from the definition. COLORS FILE SHOULD BE UPDATED! ");
+                        hasUndefinedVariables = true;
+                        break;
                     }
                 }
             }
@@ -92,6 +108,8 @@ public class StylesProcessor {
             }
 
         }
+
+        return hasUndefinedVariables;
     }
 
     public JSONObject getColorsDefinition() {
