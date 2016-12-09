@@ -15,6 +15,7 @@ import br.com.estudio89.styling.renderers.AbstractViewRenderer;
 import br.com.estudio89.styling.renderers.ActionBarRenderer;
 import br.com.estudio89.styling.renderers.ButtonRenderer;
 import br.com.estudio89.styling.renderers.CheckBoxRenderer;
+import br.com.estudio89.styling.renderers.FABRenderer;
 import br.com.estudio89.styling.renderers.GenericViewRenderer;
 import br.com.estudio89.styling.renderers.StatusBarRenderer;
 import br.com.estudio89.styling.renderers.TextViewRenderer;
@@ -31,6 +32,7 @@ public class StylesRenderer {
         this.stylesManager = stylesManager;
 
         this.renderers.add(new ButtonRenderer());
+        this.renderers.add(new FABRenderer());
         this.renderers.add(new TextViewRenderer());
         this.renderers.add(new ActionBarRenderer());
         this.renderers.add(new StatusBarRenderer());
