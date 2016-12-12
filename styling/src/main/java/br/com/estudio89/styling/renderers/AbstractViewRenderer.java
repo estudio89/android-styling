@@ -1,5 +1,7 @@
 package br.com.estudio89.styling.renderers;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,6 +9,7 @@ import java.util.Iterator;
 
 /**
  * Created by luccascorrea on 10/1/15.
+ *
  */
 public abstract class AbstractViewRenderer {
 
@@ -25,9 +28,15 @@ public abstract class AbstractViewRenderer {
                 throw new RuntimeException(e);
             }
 
-            boolean result = renderParam(view, param, value);
-            if (!result) {
-                throw new UnsupportedParamException("The param " + param + " is not supported for view of class " + view.getClass().getSimpleName());
+            try {
+                boolean result = renderParam(view, param, value);
+                if (!result) {
+                    throw new UnsupportedParamException("The param " + param + " is not supported for view of class " + view.getClass().getSimpleName());
+                }
+            } catch (Exception e) {
+                Log.e("Styling", "There was an error rendering the parameter \"" + param + "\" with value \"" + String.valueOf(value) + ".");
+                Log.e("Styling", "The exception was:", e);
+
             }
         }
     }

@@ -6,6 +6,10 @@ import br.com.estudio89.styling.renderers.AbstractViewRenderer;
 
 /**
  * Created by luccascorrea on 10/2/15.
+ *
+ * This renderer is used when a suitable render for a particular view is not found.
+ * It does nothing.
+ *
  */
 public class NullStylesRenderer extends StylesRenderer {
 
