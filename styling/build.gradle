@@ -21,4 +21,4 @@ dependencies {
 }
 
 group = 'br.com.estudio89'
-version = '1.0.3'
+version = '1.0.4'
