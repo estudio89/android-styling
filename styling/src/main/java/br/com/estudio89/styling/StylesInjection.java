@@ -1,5 +1,7 @@
 package br.com.estudio89.styling;
 
+import android.content.Context;
+
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -7,15 +9,18 @@ import java.util.HashMap;
  * Created by luccascorrea on 10/1/15.
  */
 public class StylesInjection {
+
     private static HashMap<Class, Object> graph = new HashMap<Class, Object>();
 
-    public static boolean init(InputStream stylesFile, InputStream colorsFile, InputStream viewStylesFile, String applicationPackage) {
-        return executeInjection(stylesFile, colorsFile, viewStylesFile, applicationPackage);
+    public static boolean init(Context context, InputStream stylesFile, InputStream colorsFile, InputStream viewStylesFile, String applicationPackage) {
+        return executeInjection(context, stylesFile, colorsFile, viewStylesFile, applicationPackage);
     }
 
-    private static boolean executeInjection(InputStream stylesFile, InputStream colorsFile, InputStream viewStylesFile, String applicationPackage) {
-        StylesProcessor processor = new StylesProcessor(stylesFile, colorsFile, viewStylesFile);
-        boolean hasUndefinedVariables = processor.fullProcess();
+    private static boolean executeInjection(Context context, InputStream stylesFile, InputStream colorsFile, InputStream viewStylesFile, String applicationPackage) {
+
+        StylesCacheManager stylesCacheManager = new StylesCacheManager(context);
+        boolean hasUndefinedVariables = stylesCacheManager.setupProcessor(stylesFile, colorsFile, viewStylesFile);
+        StylesProcessor processor = stylesCacheManager.getStylesProcessor();
 
         StylesManager manager = new StylesManager(processor, applicationPackage);
         StylesRenderer renderer = new StylesRenderer(manager);

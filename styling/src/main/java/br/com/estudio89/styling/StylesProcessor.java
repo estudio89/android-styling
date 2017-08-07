@@ -27,11 +27,22 @@ public class StylesProcessor {
         this.colorsDefinition = fileToJSON(colorsDefinition);
         this.viewsStyles = fileToJSON(viewsStyles);
     }
+    public StylesProcessor(byte[] stylesDefinition, byte[] colorsDefinition, byte[] viewsStyles) {
+        this.stylesDefinition = bytesToJSON(stylesDefinition);
+        this.colorsDefinition = bytesToJSON(colorsDefinition);
+        this.viewsStyles = bytesToJSON(viewsStyles);
+    }
 
     public StylesProcessor(InputStream stylesDefinition, InputStream colorsDefinition, InputStream viewsStyles) {
         this.stylesDefinition = inputStreamToJSON(stylesDefinition);
         this.colorsDefinition = inputStreamToJSON(colorsDefinition);
         this.viewsStyles = inputStreamToJSON(viewsStyles);
+    }
+
+    public StylesProcessor(JSONObject stylesObject, JSONObject colorsObject, JSONObject viewsStylesObject) {
+        this.stylesDefinition = stylesObject;
+        this.colorsDefinition = colorsObject;
+        this.viewsStyles = viewsStylesObject;
     }
 
     protected boolean processColorDefinitions () {
@@ -47,10 +58,13 @@ public class StylesProcessor {
     }
 
     public boolean fullProcess() {
+        long startTime = System.currentTimeMillis();
         boolean hasUndefinedColors = processColorDefinitions();
         boolean hasUndefinedStyles = processStylesDefinition();
         boolean hasUndefinedViewStyles = processViewStylesDefinition();
 
+        long endTime = System.currentTimeMillis();
+//        Log.d("StylesProcessor", "Total time to process styles: " + (endTime - startTime) + " ms.");
         return hasUndefinedColors || hasUndefinedStyles ||  hasUndefinedViewStyles;
     }
 
@@ -182,5 +196,22 @@ public class StylesProcessor {
         return jsonObject;
     }
 
+    private JSONObject bytesToJSON(byte[] bytes) {
+        String jsonString = null;
+        try {
+            jsonString = new String(bytes, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        return jsonObject;
+    }
 
 }
